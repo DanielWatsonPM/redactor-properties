@@ -1,0 +1,20 @@
+{
+  "name": "redactor-properties",
+  "main": "properties.js",
+  "homepage": "https://github.com/ensphere/rotcader",
+  "authors": [
+    "Imperavi"
+  ],
+  "description": "Repackage of the redactor properties plugin",
+  "license": "MIT",
+  "require" : {
+    "jquery" : "*",
+    "enshpere-rotcader" : "*"
+  },
+  "ignore": [
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
