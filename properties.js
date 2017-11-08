@@ -210,13 +210,15 @@
                     var classname = $('#modal-properties-class').val();
                     if (typeof classname === 'undefined' || classname === '')
                     {
-                        this.block.removeAttr('class');
+                        $(this.properties.block).removeAttr('class');
                     }
                     else
                     {
                         $(this.properties.block).attr('class', classname);
                     }
                 }
+
+                this.code.sync();
 
                 /** Show the labels of the class and id when clicking on the element */
                 var _self = this;
