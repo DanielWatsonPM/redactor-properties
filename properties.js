@@ -58,9 +58,19 @@
                 this.button.setAwesome('properties', 'fa-hashtag');
                 this.button.addCallback(button, this.properties.show);
 
+                /** Show the labels of the class and id when clicking on the element */
+                var _self = this;
+
+                this.$editor.on("click", "*", function(event) {
+                    _self.properties.block = _self.selection.getBlock();
+                    _self.properties.showOnClick(event);
+                });
+
             },
             show: function()
             {
+                this.properties.block = this.selection.getBlock();
+
                 this.modal.addTemplate('properties', this.properties.getTemplate());
                 this.modal.load('properties', 'Properties', 600);
 
@@ -72,7 +82,6 @@
 
                 this.modal.show();
 
-                this.properties.block = this.selection.getBlock();
             },
             createLabelId: function(css)
             {
@@ -133,6 +142,44 @@
                     $('#modal-properties-class, #modal-properties-class-label').hide();
                 }
             },
+            save: function()
+            {
+                // id
+                if (this.opts.properties.id)
+                {
+                    var id = $('#modal-properties-id').val();
+                    if (typeof id === 'undefined' || id === '')
+                    {
+                        $(this.properties.block).removeAttr('id');
+
+                    }
+                    else
+                    {
+                        $(this.properties.block).attr('id', id);
+
+                    }
+                }
+
+                // class
+                if (this.opts.properties.classname)
+                {
+                    var classname = $('#modal-properties-class').val();
+                    if (typeof classname === 'undefined' || classname === '')
+                    {
+                        $(this.properties.block).removeAttr('class');
+                    }
+                    else
+                    {
+                        $(this.properties.block).attr('class', classname);
+                    }
+                }
+
+                this.code.sync();
+
+                this.modal.close();
+                this.properties.showOnClick(false);
+
+            },
             showOnClick: function(e)
             {
                 if (e !== false)
@@ -142,7 +189,7 @@
 
                 var zindex = (typeof this.fullscreen !== 'undefined' && this.fullscreen.isOpen) ? 1052 : 99;
 
-                if (!this.properties.block || !this.utils.isRedactorParent(this.properties.block) || this.utils.isCurrentOrParent(['figure', 'li']))
+                if(!this.utils.isRedactorParent(this.properties.block) || this.utils.isCurrentOrParent(['figure', 'li']))
                 {
                     return;
                 }
@@ -187,48 +234,6 @@
                 }
 
                 return classname;
-            },
-            save: function()
-            {
-                // id
-                if (this.opts.properties.id)
-                {
-                    var id = $('#modal-properties-id').val();
-                    if (typeof id === 'undefined' || id === '')
-                    {
-                        $(this.properties.block).removeAttr('id');
-                    }
-                    else
-                    {
-                        $(this.properties.block).attr('id', id);
-                    }
-                }
-
-                // class
-                if (this.opts.properties.classname)
-                {
-                    var classname = $('#modal-properties-class').val();
-                    if (typeof classname === 'undefined' || classname === '')
-                    {
-                        $(this.properties.block).removeAttr('class');
-                    }
-                    else
-                    {
-                        $(this.properties.block).attr('class', classname);
-                    }
-                }
-
-                this.code.sync();
-
-                /** Show the labels of the class and id when clicking on the element */
-                var _self = this;
-                $(this.properties.block).off("click").on("click", function(event) {
-                    _self.properties.showOnClick(event);
-                });
-
-                this.modal.close();
-                this.properties.showOnClick(false);
-
             },
             hideOnBlur: function(e)
             {
